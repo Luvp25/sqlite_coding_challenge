@@ -17,3 +17,20 @@ FROM products p
 JOIN order_items oi ON p.id = oi.product_id
 GROUP BY p.category
 ORDER BY revenue DESC;
+
+-- TASK 3: Employees earning more than their department average
+SELECT 
+    e.first_name, 
+    e.last_name, 
+    d.name AS department_name, 
+    e.salary,
+    dept_avg.avg_salary AS department_average
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+JOIN (
+    SELECT department_id, AVG(salary) AS avg_salary
+    FROM employees
+    GROUP BY department_id
+) AS dept_avg ON e.department_id = dept_avg.department_id
+WHERE e.salary > dept_avg.avg_salary
+ORDER BY department_name ASC, e.salary DESC;
